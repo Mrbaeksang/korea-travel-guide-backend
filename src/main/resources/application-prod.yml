@@ -7,8 +7,10 @@ spring:
       enabled: false  # 프로덕션 환경에서 H2 Console 비활성화 (보안)
   
   datasource:
-    url: jdbc:${DATABASE_URL}  # Railway DATABASE_URL에 jdbc: 프리픽스 추가
-    driver-class-name: org.postgresql.Driver  # PostgreSQL 드라이버 명시 (H2 대신)
+    url: jdbc:postgresql://${PGHOST}:${PGPORT}/${PGDATABASE}
+    username: ${PGUSER}
+    password: ${PGPASSWORD}
+    driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
@@ -25,7 +27,10 @@ spring:
 
   data:
     redis:  # 캐싱 전용 (세션 저장 안함 - JWT 기반 stateless 인증 사용)
-      url: ${REDIS_URL}  # Railway가 제공하는 완전한 Redis 연결 URL
+      host: ${REDISHOST}
+      port: ${REDISPORT}
+      password: ${REDISPASSWORD}
+      username: ${REDISUSER}
 
   # RabbitMQ 설정 (WebSocket STOMP Relay용)
   # Railway에 RabbitMQ 서비스가 없으므로 SimpleBroker 사용

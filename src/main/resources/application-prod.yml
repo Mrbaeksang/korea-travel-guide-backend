@@ -8,6 +8,7 @@ spring:
   
   datasource:
     url: jdbc:${DATABASE_URL}  # Railway DATABASE_URL에 jdbc: 프리픽스 추가
+    driver-class-name: org.postgresql.Driver  # PostgreSQL 드라이버 명시 (H2 대신)
 
   jpa:
     hibernate:

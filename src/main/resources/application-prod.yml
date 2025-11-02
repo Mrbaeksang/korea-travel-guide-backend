@@ -7,7 +7,7 @@ spring:
       enabled: false  # 프로덕션 환경에서 H2 Console 비활성화 (보안)
   
   datasource:
-    url: ${DATABASE_URL}  # Railway가 제공하는 완전한 PostgreSQL 연결 URL
+    url: jdbc:${DATABASE_URL}  # Railway DATABASE_URL에 jdbc: 프리픽스 추가
 
   jpa:
     hibernate:

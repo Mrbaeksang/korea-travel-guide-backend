@@ -7,10 +7,7 @@ spring:
       enabled: false  # 프로덕션 환경에서 H2 Console 비활성화 (보안)
   
   datasource:
-    url: jdbc:postgresql://postgresql_1:5432/${SPRING__DATASOURCE__URL___DB_NAME}
-    username: ${SPRING_DATASOURCE_USERNAME} # local용 근접 접근 계정
-    password: ${SPRING_DATASOURCE_PASSWORD}
-    driver-class-name: org.postgresql.Driver
+    url: ${DATABASE_URL}  # Railway가 제공하는 완전한 PostgreSQL 연결 URL
 
   jpa:
     hibernate:
@@ -27,20 +24,18 @@ spring:
 
   data:
     redis:  # 캐싱 전용 (세션 저장 안함 - JWT 기반 stateless 인증 사용)
-      host: ${REDIS_HOST}
-      port: ${REDIS_PORT}
-      password: ${REDIS_PASSWORD:}
-      database: 0
+      url: ${REDIS_URL}  # Railway가 제공하는 완전한 Redis 연결 URL
 
   # RabbitMQ 설정 (WebSocket STOMP Relay용)
-  rabbitmq:
-    host: ${RABBITMQ_HOST}
-    port: ${RABBITMQ_PORT}
-    username: ${RABBITMQ_USERNAME}
-    password: ${RABBITMQ_PASSWORD}
-    stomp-port: ${RABBITMQ_STOMP_PORT}
-    connection-timeout: 5000
-    requested-heartbeat: 30
+  # Railway에 RabbitMQ 서비스가 없으므로 SimpleBroker 사용
+  # rabbitmq:
+  #   host: ${RABBITMQ_HOST}
+  #   port: ${RABBITMQ_PORT}
+  #   username: ${RABBITMQ_USERNAME}
+  #   password: ${RABBITMQ_PASSWORD}
+  #   stomp-port: ${RABBITMQ_STOMP_PORT}
+  #   connection-timeout: 5000
+  #   requested-heartbeat: 30
 
   session:
     store-type: none  # JWT 기반 인증 사용 - 세션 불필요

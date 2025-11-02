@@ -1,0 +1,74 @@
+spring:
+  autoconfigure:
+    exclude:
+  
+  h2:
+    console:
+      enabled: false  # 프로덕션 환경에서 H2 Console 비활성화 (보안)
+  
+  datasource:
+    url: jdbc:postgresql://postgresql_1:5432/${SPRING__DATASOURCE__URL___DB_NAME}
+    username: ${SPRING_DATASOURCE_USERNAME} # local용 근접 접근 계정
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        # dialect 설정 제거: Hibernate 6.x부터 JDBC URL 기반으로 자동 감지되며, 명시적 설정은 deprecated됨
+
+  ai:
+    vectorstore:
+      jdbc:
+        initialize-schema: false
+
+  data:
+    redis:  # 캐싱 전용 (세션 저장 안함 - JWT 기반 stateless 인증 사용)
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD:}
+      database: 0
+
+  # RabbitMQ 설정 (WebSocket STOMP Relay용)
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
+    stomp-port: ${RABBITMQ_STOMP_PORT}
+    connection-timeout: 5000
+    requested-heartbeat: 30
+
+  session:
+    store-type: none  # JWT 기반 인증 사용 - 세션 불필요
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
+
+logging:
+  level:
+    root: INFO
+    com.back: INFO                # 서비스 로그는 정보 레벨 이상만
+    org.springframework.web: WARN # 웹 관련 경고/에러만
+    org.springframework.security: WARN # 로그인 실패/보안 경고 위주
+    org.hibernate.SQL: WARN       # SQL 로그 비활성화 (프로덕션 성능 및 로그 용량 최적화). 디버깅 필요시 INFO로 변경
+  pattern:
+    console: "[%d{yyyy-MM-dd HH:mm:ss}] %-5level %logger{36} - %msg%n"
+
+custom:
+  site:
+    cookieDomain: "${custom.prod.cookieDomain}"
+    frontUrl: "${custom.prod.frontUrl}"
+    backUrl: "${custom.prod.backUrl}"
+    name: team11
+  cookie:
+    secure: true  # 프로덕션 환경: HTTPS에서만 쿠키 전송

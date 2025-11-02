@@ -1,0 +1,21 @@
+tour:
+  content-type-id:
+    mapping:
+      관광지:
+        KorService2: "12"
+      문화시설:
+        KorService2: "14"
+      축제공연행사:
+        KorService2: "15"
+      여행코스:
+        KorService2: "25"
+      레포츠:
+        KorService2: "28"
+      숙박:
+        KorService2: "32"
+      쇼핑:
+        KorService2: "38"
+      음식점:
+        KorService2: "39"
+
+    types-description: "관광지, 문화시설, 축제공연행사, 여행코스, 레포츠, 숙박, 쇼핑, 음식점"

@@ -4,7 +4,8 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
 
-@Profile("prod")
+// Railway에 RabbitMQ 서비스 추가 시 활성화
+@Profile("rabbitmq")
 @Component
 class RabbitChatMessagePublisher(
 //    private val messagingTemplate: SimpMessagingTemplate,

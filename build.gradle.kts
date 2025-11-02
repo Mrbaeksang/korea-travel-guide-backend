@@ -20,6 +20,11 @@ java {
     }
 }
 
+// plain JAR 생성 비활성화 (실행 가능한 Spring Boot JAR만 생성)
+tasks.named<Jar>("jar") {
+    enabled = false
+}
+
 repositories {
     mavenCentral()
     maven { url = uri("https://repo.spring.io/milestone") }

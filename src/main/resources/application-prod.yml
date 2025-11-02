@@ -9,7 +9,7 @@ spring:
   datasource:
     url: jdbc:postgresql://${PGHOST}:${PGPORT}/${PGDATABASE}
     username: ${PGUSER}
-    password: ${PGPASSWORD}
+    password: ${POSTGRES_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -29,7 +29,7 @@ spring:
     redis:  # 캐싱 전용 (세션 저장 안함 - JWT 기반 stateless 인증 사용)
       host: ${REDISHOST}
       port: ${REDISPORT}
-      password: ${REDISPASSWORD}
+      password: ${REDIS_PASSWORD}
       username: ${REDISUSER}
 
   # RabbitMQ 설정 (WebSocket STOMP Relay용)

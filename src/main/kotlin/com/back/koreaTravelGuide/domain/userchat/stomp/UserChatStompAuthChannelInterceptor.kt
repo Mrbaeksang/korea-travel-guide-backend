@@ -14,26 +14,32 @@ import org.springframework.stereotype.Component
 class UserChatStompAuthChannelInterceptor(
     private val jwtTokenProvider: JwtTokenProvider,
 ) : ChannelInterceptor {
+    private val log = org.slf4j.LoggerFactory.getLogger(this::class.java)
+
     override fun preSend(
         message: Message<*>,
         channel: MessageChannel,
     ): Message<*>? {
         val accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor::class.java) ?: return message
 
-//        log.info("📨 [STOMP] Command: ${accessor.command}, User: ${accessor.user}, SessionId: ${accessor.sessionId}")
+        log.info("📨 [STOMP] Command: ${accessor.command}, User: ${accessor.user}, SessionId: ${accessor.sessionId}")
 
         if (accessor.command == StompCommand.CONNECT) {
             val rawHeader =
                 accessor.getFirstNativeHeader("Authorization")
-                    ?: throw AuthenticationCredentialsNotFoundException("Authorization header is missing")
+                    ?: run {
+                        log.error("❌ [STOMP] Authorization header missing")
+                        throw AuthenticationCredentialsNotFoundException("Authorization header is missing")
+                    }
             val token = rawHeader.removePrefix("Bearer ").trim()
             if (!jwtTokenProvider.validateToken(token)) {
+                log.error("❌ [STOMP] Invalid JWT token")
                 throw AuthenticationCredentialsNotFoundException("Invalid JWT token")
             }
             accessor.user = jwtTokenProvider.getAuthentication(token)
-//            log.info("✅ [STOMP] CONNECT authenticated: userId=${accessor.user?.name}")
+            log.info("✅ [STOMP] CONNECT authenticated: userId=${accessor.user?.name}")
         } else if (accessor.user == null) {
-//            log.error("❌ [STOMP] Unauthenticated ${accessor.command} request - SessionId: ${accessor.sessionId}")
+            log.error("❌ [STOMP] Unauthenticated ${accessor.command} request - SessionId: ${accessor.sessionId}")
             throw AuthenticationCredentialsNotFoundException("Unauthenticated STOMP request")
         }
 

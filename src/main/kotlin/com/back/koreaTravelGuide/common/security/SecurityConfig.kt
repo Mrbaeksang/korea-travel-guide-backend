@@ -41,6 +41,36 @@ class SecurityConfig(
                     frameOptions { disable() }
                 } else {
                     frameOptions { sameOrigin }
+                    // XSS 보호 헤더
+                    xssProtection { }
+                    contentTypeOptions { }
+                    // HSTS (HTTPS Strict Transport Security)
+                    httpStrictTransportSecurity {
+                        includeSubDomains = true
+                        maxAgeInSeconds = 31536000 // 1년
+                    }
+                    // Content Security Policy
+                    contentSecurityPolicy {
+                        policyDirectives =
+                            "default-src 'self'; " +
+                            "script-src 'self' 'unsafe-inline' 'unsafe-eval'; " +
+                            "style-src 'self' 'unsafe-inline'; " +
+                            "img-src 'self' data: https:; " +
+                            "font-src 'self' data:; " +
+                            "connect-src 'self' https://korea-travel-guide.vercel.app " +
+                            "https://openrouter.ai https://apihub.kma.go.kr https://apis.data.go.kr; " +
+                            "frame-ancestors 'none'"
+                    }
+                    // Referrer Policy
+                    referrerPolicy {
+                        policy =
+                            org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter.ReferrerPolicy
+                                .STRICT_ORIGIN_WHEN_CROSS_ORIGIN
+                    }
+                    // Permissions Policy (Feature Policy)
+                    permissionsPolicy {
+                        policy = "geolocation=(), microphone=(), camera=()"
+                    }
                 }
             }
 

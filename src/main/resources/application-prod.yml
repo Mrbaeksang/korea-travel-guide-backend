@@ -1,8 +1,11 @@
+server:
+  forward-headers-strategy: framework  # Railway 리버스 프록시 HTTPS 인식
+
 spring:
   autoconfigure:
     exclude:
       - org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration  # Railway에 RabbitMQ 없음
-  
+
   h2:
     console:
       enabled: false  # 프로덕션 환경에서 H2 Console 비활성화 (보안)

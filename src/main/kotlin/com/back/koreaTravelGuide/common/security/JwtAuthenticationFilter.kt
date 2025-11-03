@@ -21,21 +21,26 @@ class JwtAuthenticationFilter(
     ) {
         val token = resolveToken(request)
 
-        val isBlacklisted =
-            if (token != null) {
+        if (token != null) {
+            val isBlacklisted =
                 try {
                     redisTemplate.opsForValue().get("blacklist:$token") != null
                 } catch (e: Exception) {
                     log.debug("Redis 블랙리스트 체크 실패 (Redis 미사용 환경): ${e.message}")
                     false
                 }
-            } else {
-                false
+
+            if (isBlacklisted) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token has been revoked")
+                return
             }
 
-        if (token != null && !isBlacklisted && jwtTokenProvider.validateToken(token)) {
-            val authentication = jwtTokenProvider.getAuthentication(token)
+            if (!jwtTokenProvider.validateToken(token)) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "JWT token has expired or is invalid")
+                return
+            }
 
+            val authentication = jwtTokenProvider.getAuthentication(token)
             SecurityContextHolder.getContext().authentication = authentication
         }
 

@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.AuthenticationException
 import org.springframework.validation.FieldError
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler
  * throw IllegalArgumentException("메시지") → 400
  * throw NoSuchElementException("메시지") → 404
  * throw IllegalStateException("메시지") → 409
+ * throw AuthenticationException("메시지") → 401
  * 기타 모든 예외 → 500
  */
 @ControllerAdvice
@@ -46,6 +48,12 @@ class GlobalExceptionHandler {
     fun handleIllegalState(ex: IllegalStateException): ResponseEntity<ApiResponse<Void>> {
         logger.warn("부적절한 상태: {}", ex.message)
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiResponse(ex.message ?: "요청을 처리할 수 없는 상태입니다"))
+    }
+
+    @ExceptionHandler(AuthenticationException::class)
+    fun handleAuthentication(ex: AuthenticationException): ResponseEntity<ApiResponse<Void>> {
+        logger.warn("인증 실패: {}", ex.message)
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse(ex.message ?: "인증에 실패했습니다"))
     }
 
     @ExceptionHandler(Exception::class)

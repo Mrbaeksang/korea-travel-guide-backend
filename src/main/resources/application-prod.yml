@@ -40,7 +40,8 @@ spring:
 
   # RabbitMQ 설정 (WebSocket STOMP Relay용)
   rabbitmq:
-    addresses: ${RABBITMQ_PRIVATE_URL}
+    host: rabbitmq.railway.internal
+    port: 5672
     username: ${RABBITMQ_DEFAULT_USER}
     password: ${RABBITMQ_DEFAULT_PASS}
     stomp-port: 61613

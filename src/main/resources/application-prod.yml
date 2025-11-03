@@ -18,7 +18,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create  # 임시: 모든 테이블 재생성. 배포 성공 후 즉시 update로 변경!
+      ddl-auto: update  # 운영 환경: 기존 테이블 유지하고 변경사항만 적용
     properties:
       hibernate:
         format_sql: true
@@ -76,7 +76,6 @@ logging:
 
 custom:
   site:
-    cookieDomain: "${custom.prod.cookieDomain}"
     frontUrl: "${custom.prod.frontUrl}"
     backUrl: "${custom.prod.backUrl}"
   cookie:

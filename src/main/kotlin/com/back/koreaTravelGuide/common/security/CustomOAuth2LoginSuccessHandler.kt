@@ -62,7 +62,7 @@ class CustomOAuth2LoginSuccessHandler(
                     .from("refreshToken", refreshToken)
                     .httpOnly(true)
                     .secure(cookieSecure) // dev: false, prod: true
-                    .domain(AppConfig.cookieDomain) // dev: localhost, prod: team11.giwon11292.com
+                    // domain 제거: 크로스 도메인 쿠키를 위해 domain 속성 사용 안함
                     .path("/")
                     .maxAge(Duration.ofDays(refreshTokenExpirationDays))
                     .sameSite(if (cookieSecure) "None" else "Lax") // prod: None+Secure, dev: Lax

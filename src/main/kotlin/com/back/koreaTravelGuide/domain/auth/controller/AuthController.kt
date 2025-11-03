@@ -1,7 +1,6 @@
 package com.back.koreaTravelGuide.domain.auth.controller
 
 import com.back.koreaTravelGuide.common.ApiResponse
-import com.back.koreaTravelGuide.common.config.AppConfig
 import com.back.koreaTravelGuide.common.security.getUserId
 import com.back.koreaTravelGuide.domain.auth.dto.request.UserRoleUpdateRequest
 import com.back.koreaTravelGuide.domain.auth.dto.response.AccessTokenResponse
@@ -39,7 +38,7 @@ class AuthController(
                 .from("refreshToken", newRefreshToken)
                 .httpOnly(true)
                 .secure(cookieSecure) // dev: false, prod: true
-                .domain(AppConfig.cookieDomain) // dev: localhost, prod: team11.giwon11292.com
+                // domain 제거: 크로스 도메인 쿠키를 위해 domain 속성 사용 안함
                 .path("/")
                 .maxAge(Duration.ofDays(refreshTokenExpirationDays))
                 .sameSite(if (cookieSecure) "None" else "Lax")
@@ -65,7 +64,7 @@ class AuthController(
                 .from("refreshToken", refreshToken)
                 .httpOnly(true)
                 .secure(cookieSecure) // dev: false, prod: true
-                .domain(AppConfig.cookieDomain) // dev: localhost, prod: team11.giwon11292.com
+                // domain 제거: 크로스 도메인 쿠키를 위해 domain 속성 사용 안함
                 .path("/")
                 .maxAge(Duration.ofDays(refreshTokenExpirationDays))
                 .sameSite(if (cookieSecure) "None" else "Lax")
@@ -95,7 +94,7 @@ class AuthController(
                 .from("refreshToken", "")
                 .httpOnly(true)
                 .secure(cookieSecure)
-                .domain(AppConfig.cookieDomain)
+                // domain 제거: 크로스 도메인 쿠키를 위해 domain 속성 사용 안함
                 .path("/")
                 .maxAge(0) // 쿠키 즉시 만료
                 .sameSite(if (cookieSecure) "None" else "Lax")

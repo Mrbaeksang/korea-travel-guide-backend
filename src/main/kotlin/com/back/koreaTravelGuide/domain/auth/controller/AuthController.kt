@@ -78,12 +78,30 @@ class AuthController(
 
     @Operation(summary = "로그아웃")
     @PostMapping("/logout")
-    fun logout(request: HttpServletRequest): ResponseEntity<ApiResponse<Unit>> {
-        val token =
+    fun logout(
+        request: HttpServletRequest,
+        @CookieValue(value = "refreshToken", required = false) refreshToken: String?,
+        response: HttpServletResponse,
+    ): ResponseEntity<ApiResponse<Unit>> {
+        val accessToken =
             request.getHeader("Authorization")?.substring(7)
                 ?: throw IllegalArgumentException("토큰이 없습니다.")
 
-        authService.logout(token)
+        authService.logout(accessToken, refreshToken)
+
+        // refreshToken 쿠키 삭제 (maxAge=0)
+        val expiredCookie =
+            ResponseCookie
+                .from("refreshToken", "")
+                .httpOnly(true)
+                .secure(cookieSecure)
+                .domain(AppConfig.cookieDomain)
+                .path("/")
+                .maxAge(0) // 쿠키 즉시 만료
+                .sameSite(if (cookieSecure) "None" else "Lax")
+                .build()
+
+        response.addHeader("Set-Cookie", expiredCookie.toString())
 
         return ResponseEntity.ok(ApiResponse("로그아웃 되었습니다."))
     }

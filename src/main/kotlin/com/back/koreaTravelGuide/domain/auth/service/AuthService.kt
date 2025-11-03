@@ -46,11 +46,21 @@ class AuthService(
         return Pair(accessToken, refreshToken)
     }
 
-    fun logout(accessToken: String) {
+    fun logout(
+        accessToken: String,
+        refreshToken: String?,
+    ) {
+        // Access Token 블랙리스트 추가
         val remainingTime = jwtTokenProvider.getRemainingTime(accessToken)
-
         if (remainingTime > 0) {
             redisTemplate.opsForValue().set("blacklist:$accessToken", "logout", remainingTime, TimeUnit.MILLISECONDS)
+        }
+
+        // Refresh Token Redis에서 삭제
+        if (refreshToken != null && jwtTokenProvider.validateToken(refreshToken)) {
+            val userId = jwtTokenProvider.getUserIdFromToken(refreshToken)
+            val redisKey = "refreshToken:$userId"
+            redisTemplate.delete(redisKey)
         }
     }
 

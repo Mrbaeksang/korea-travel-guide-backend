@@ -18,17 +18,11 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update  # 운영 환경: 기존 테이블 유지하고 변경사항만 적용
+      ddl-auto: create  # 임시: 모든 테이블 재생성. 배포 성공 후 즉시 update로 변경!
     properties:
       hibernate:
         format_sql: true
         # dialect 설정 제거: Hibernate 6.x부터 JDBC URL 기반으로 자동 감지되며, 명시적 설정은 deprecated됨
-
-  sql:
-    init:
-      mode: always  # 임시: 잘못된 spring_ai_chat_memory 테이블 삭제용
-      data-locations: classpath:drop-spring-ai-table.sql
-      continue-on-error: true  # 테이블이 없어도 계속 진행
 
   ai:
     vectorstore:

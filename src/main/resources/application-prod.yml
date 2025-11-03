@@ -67,9 +67,10 @@ management:
 logging:
   level:
     root: INFO
-    com.back: INFO                # 서비스 로그는 정보 레벨 이상만
+    com.back: DEBUG               # AI 툴 호출 디버깅을 위해 DEBUG로 변경
     org.springframework.web: WARN # 웹 관련 경고/에러만
     org.springframework.security: WARN # 로그인 실패/보안 경고 위주
+    org.springframework.ai: INFO  # Spring AI 로그 활성화
     org.hibernate.SQL: WARN       # SQL 로그 비활성화 (프로덕션 성능 및 로그 용량 최적화). 디버깅 필요시 INFO로 변경
   pattern:
     console: "[%d{yyyy-MM-dd HH:mm:ss}] %-5level %logger{36} - %msg%n"

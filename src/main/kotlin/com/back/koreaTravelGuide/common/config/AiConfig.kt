@@ -8,11 +8,13 @@ import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor
 import org.springframework.ai.chat.memory.ChatMemory
 import org.springframework.ai.chat.memory.MessageWindowChatMemory
 import org.springframework.ai.chat.memory.repository.jdbc.JdbcChatMemoryRepository
+import org.springframework.ai.chat.memory.repository.jdbc.JdbcChatMemoryRepositoryDialect
 import org.springframework.ai.chat.model.ChatModel
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.web.client.RestTemplate
+import javax.sql.DataSource
 
 /**
  * Spring AI 설정
@@ -51,10 +53,14 @@ class AiConfig {
      * ChatMemory 빈 생성 (넉넉히 50개 메시지 유지, PostgreSQL 기반)
      */
     @Bean
-    fun chatMemory(jdbcTemplate: JdbcTemplate): ChatMemory {
+    fun chatMemory(
+        jdbcTemplate: JdbcTemplate,
+        dataSource: DataSource,
+    ): ChatMemory {
         val repository =
             JdbcChatMemoryRepository.builder()
                 .jdbcTemplate(jdbcTemplate)
+                .dialect(JdbcChatMemoryRepositoryDialect.from(dataSource))
                 .build()
 
         return MessageWindowChatMemory.builder()

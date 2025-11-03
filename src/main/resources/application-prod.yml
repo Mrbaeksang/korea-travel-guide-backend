@@ -18,7 +18,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create  # 임시: 기존 테이블 삭제하고 재생성 (Spring AI 스키마 적용 위해)
     properties:
       hibernate:
         format_sql: true

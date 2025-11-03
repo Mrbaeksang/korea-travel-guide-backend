@@ -14,8 +14,11 @@ class UserChatSimpleWebSocketConfig(
 ) : WebSocketMessageBrokerConfigurer {
     override fun registerStompEndpoints(registry: StompEndpointRegistry) {
         registry.addEndpoint("/ws/userchat")
-            .setAllowedOriginPatterns("*")
-//            .setAllowedOrigins("https://www.team11.giwon11292.com", "http://localhost:3000")
+            .setAllowedOrigins(
+                "http://localhost:3000",
+                "http://localhost:63342",
+                com.back.koreaTravelGuide.common.config.AppConfig.siteFrontUrl,
+            )
             .withSockJS()
     }
 

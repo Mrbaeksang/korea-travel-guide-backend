@@ -45,7 +45,7 @@ class TourTool(
      *
      * 예시 출력: [{"contentId":"126508", "title":"진주성", "addr":"경상남도 진주시...", ...}]
      */
-    @Tool(description = "areaBasedList2 : 지역기반 관광정보 조회, 특정 지역의 관광 정보 조회")
+    @Tool(description = "특정 지역의 관광지, 음식점, 숙박, 쇼핑, 문화시설, 축제, 레포츠 정보를 조회합니다")
     fun getAreaBasedTourInfo(
         @ToolParam(
             description =
@@ -99,7 +99,7 @@ class TourTool(
      *
      * 예시 출력: [{"contentId":"264247", "title":"명동교자", "dist":"45.3", ...}]
      */
-    @Tool(description = "locationBasedList2 : 위치기반 관광정보 조회, 특정 위치 기반의 관광 정보 조회")
+    @Tool(description = "특정 GPS 좌표 기반으로 주변의 관광지, 음식점, 숙박, 쇼핑, 문화시설 정보를 조회합니다")
     fun getLocationBasedTourInfo(
         @ToolParam(
             description =
@@ -157,7 +157,7 @@ class TourTool(
      *
      * 예시 출력: {"contentId":"126508", "overview":"임진왜란 때...", "usagetime":"09:00~18:00", ...}
      */
-    @Tool(description = "detailCommon2 : 관광정보 상세조회, 특정 관광 정보의 상세 정보 조회")
+    @Tool(description = "관광지, 음식점, 숙박시설 등의 상세 정보(개요, 이용시간, 요금, 주차정보 등)를 조회합니다")
     fun getTourDetailInfo(
         @ToolParam(
             description =
@@ -200,7 +200,7 @@ class TourTool(
      *
      * 예시 출력: [{"contentId":"...", "title":"진주남강유등축제", "eventstartdate":"20251001", ...}]
      */
-    @Tool(description = "searchFestival2 : 축제/공연/행사 정보 조회")
+    @Tool(description = "특정 기간 동안 열리는 축제, 공연, 행사 정보를 조회합니다")
     fun getFestivalInfo(
         @ToolParam(
             description = "행사 시작일 (YYYYMMDD 형식, 예: 20250101)",
@@ -262,7 +262,7 @@ class TourTool(
      *
      * 예시 출력: [{"contentId":"...", "title":"진주 전통한옥", "addr":"경상남도 진주시...", ...}]
      */
-    @Tool(description = "searchStay2 : 베니키아/한옥/굿스테이 숙박 정보 조회")
+    @Tool(description = "베니키아, 한옥, 굿스테이 등 한국 대표 숙박시설 정보를 조회합니다")
     fun getStayInfo(
         @ToolParam(
             description =

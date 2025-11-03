@@ -309,8 +309,12 @@ Common exceptions mapped to HTTP status:
 2. **Make changes**: Follow DDD structure - put code in correct domain
 3. **Format code**: `./gradlew ktlintFormat`
 4. **Test**: `./gradlew test`
-5. **Commit**: `{type}(scope): summary` (e.g., `feat(be): Add weather caching`)
-6. **PR title**: `{type}(scope): summary (#{issue})` (e.g., `feat(be): Add weather caching (#42)`)
+5. **Commit**:
+   - **반드시 한글로 작성** (영어 금지)
+   - **AI 관련 멘트 절대 금지** (예: "Made by Claude", "Generated with AI" 등)
+   - 형식: `{type}(scope): 한글 요약`
+   - 예시: `feat(be): 날씨 캐싱 기능 추가`
+6. **PR title**: `{type}(scope): 한글 요약 (#{issue})` (예: `feat(be): 날씨 캐싱 기능 추가 (#42)`)
 
 ## Infrastructure & Deployment
 

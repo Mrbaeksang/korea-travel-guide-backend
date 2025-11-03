@@ -99,6 +99,8 @@ class SecurityConfig(
                 authorize("/api/auth/**", permitAll)
                 authorize("/actuator/health", permitAll)
                 authorize("/favicon.ico", permitAll)
+                // WebSocket 핸드셰이크 허용 - STOMP 인증은 UserChatStompAuthChannelInterceptor에서 처리
+                authorize("/ws/**", permitAll)
                 if (isDev) {
                     authorize(anyRequest, permitAll)
                 } else {

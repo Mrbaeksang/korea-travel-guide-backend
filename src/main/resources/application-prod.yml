@@ -28,6 +28,11 @@ spring:
     vectorstore:
       jdbc:
         initialize-schema: true
+    chat:
+      memory:
+        repository:
+          jdbc:
+            initialize-schema: always
 
   data:
     redis:  # 캐싱 전용 (세션 저장 안함 - JWT 기반 stateless 인증 사용)

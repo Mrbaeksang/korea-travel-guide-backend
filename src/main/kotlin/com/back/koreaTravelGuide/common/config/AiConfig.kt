@@ -55,7 +55,6 @@ class AiConfig {
         val repository =
             JdbcChatMemoryRepository.builder()
                 .jdbcTemplate(jdbcTemplate)
-                .initializeSchema(true)
                 .build()
 
         return MessageWindowChatMemory.builder()

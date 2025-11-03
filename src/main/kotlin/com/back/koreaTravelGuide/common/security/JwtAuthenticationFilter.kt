@@ -1,10 +1,13 @@
 package com.back.koreaTravelGuide.common.security
 
+import com.back.koreaTravelGuide.common.ApiResponse
 import com.back.koreaTravelGuide.common.logging.log
+import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.data.redis.core.RedisTemplate
+import org.springframework.http.MediaType
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
@@ -13,6 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter
 class JwtAuthenticationFilter(
     private val jwtTokenProvider: JwtTokenProvider,
     private val redisTemplate: RedisTemplate<String, String>,
+    private val objectMapper: ObjectMapper,
 ) : OncePerRequestFilter() {
     override fun doFilterInternal(
         request: HttpServletRequest,
@@ -31,12 +35,12 @@ class JwtAuthenticationFilter(
                 }
 
             if (isBlacklisted) {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token has been revoked")
+                sendUnauthorizedResponse(response, "토큰이 무효화되었습니다")
                 return
             }
 
             if (!jwtTokenProvider.validateToken(token)) {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "JWT token has expired or is invalid")
+                sendUnauthorizedResponse(response, "토큰이 만료되었거나 유효하지 않습니다")
                 return
             }
 
@@ -55,5 +59,18 @@ class JwtAuthenticationFilter(
         } else {
             null
         }
+    }
+
+    private fun sendUnauthorizedResponse(
+        response: HttpServletResponse,
+        message: String,
+    ) {
+        response.status = HttpServletResponse.SC_UNAUTHORIZED
+        response.contentType = MediaType.APPLICATION_JSON_VALUE
+        response.characterEncoding = "UTF-8"
+
+        val apiResponse = ApiResponse<Void>(message)
+        response.writer.write(objectMapper.writeValueAsString(apiResponse))
+        response.writer.flush()
     }
 }

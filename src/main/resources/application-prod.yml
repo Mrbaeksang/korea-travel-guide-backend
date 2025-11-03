@@ -2,9 +2,6 @@ server:
   forward-headers-strategy: framework  # Railway 리버스 프록시 HTTPS 인식
 
 spring:
-  autoconfigure:
-    exclude:
-      - org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration  # Railway에 RabbitMQ 없음
 
   h2:
     console:
@@ -42,15 +39,14 @@ spring:
       username: ${REDISUSER}
 
   # RabbitMQ 설정 (WebSocket STOMP Relay용)
-  # Railway에 RabbitMQ 서비스가 없으므로 SimpleBroker 사용
-  # rabbitmq:
-  #   host: ${RABBITMQ_HOST}
-  #   port: ${RABBITMQ_PORT}
-  #   username: ${RABBITMQ_USERNAME}
-  #   password: ${RABBITMQ_PASSWORD}
-  #   stomp-port: ${RABBITMQ_STOMP_PORT}
-  #   connection-timeout: 5000
-  #   requested-heartbeat: 30
+  rabbitmq:
+    host: ${RABBITMQ_HOST:rabbitmq.railway.internal}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_DEFAULT_USER}
+    password: ${RABBITMQ_DEFAULT_PASS}
+    stomp-port: ${RABBITMQ_STOMP_PORT:61613}
+    connection-timeout: 5000
+    requested-heartbeat: 30
 
   session:
     store-type: none  # JWT 기반 인증 사용 - 세션 불필요

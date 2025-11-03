@@ -8,7 +8,7 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer
 
-@Profile("!rabbitmq") // RabbitMQ가 아닌 환경에서만 사용 (dev 로컬)
+@Profile("!prod") // 개발 환경에서 SimpleBroker 사용 (로컬)
 @Configuration
 @EnableWebSocketMessageBroker
 class UserChatSimpleWebSocketConfig(

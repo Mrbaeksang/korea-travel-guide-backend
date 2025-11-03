@@ -14,8 +14,8 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 
 // userChat에서만 사용할 것 같아서 전역에 두지 않고 userChat 도메인에 두었음
 
-// Railway에 RabbitMQ 서비스 추가 시 활성화
-@Profile("rabbitmq")
+// 프로덕션 환경에서 RabbitMQ STOMP Relay 사용
+@Profile("prod")
 @Configuration
 @EnableWebSocketMessageBroker
 class UserChatRabbitWebSocketConfig(

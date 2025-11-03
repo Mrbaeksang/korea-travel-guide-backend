@@ -1,10 +1,12 @@
 package com.back.koreaTravelGuide.domain.ai.aiChat.entity
 
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -22,4 +24,7 @@ class AiChatSession(
     var sessionTitle: String,
     @Column(name = "created_at", nullable = false)
     val createdAt: ZonedDateTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul")),
-)
+) {
+    @OneToMany(mappedBy = "aiChatSession", cascade = [CascadeType.ALL], orphanRemoval = true)
+    val messages: MutableList<AiChatMessage> = mutableListOf()
+}

@@ -8,7 +8,9 @@ import com.back.koreaTravelGuide.domain.ai.tour.dto.TourParams
 import com.back.koreaTravelGuide.domain.ai.tour.dto.TourResponse
 import com.back.koreaTravelGuide.domain.ai.tour.service.usecase.TourAreaBasedUseCase
 import com.back.koreaTravelGuide.domain.ai.tour.service.usecase.TourDetailUseCase
+import com.back.koreaTravelGuide.domain.ai.tour.service.usecase.TourFestivalUseCase
 import com.back.koreaTravelGuide.domain.ai.tour.service.usecase.TourLocationBasedUseCase
+import com.back.koreaTravelGuide.domain.ai.tour.service.usecase.TourStayUseCase
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -26,6 +28,8 @@ class TourServiceTest {
     private lateinit var tourAreaBasedUseCase: TourAreaBasedUseCase
     private lateinit var tourLocationBasedUseCase: TourLocationBasedUseCase
     private lateinit var tourDetailUseCase: TourDetailUseCase
+    private lateinit var tourFestivalUseCase: TourFestivalUseCase
+    private lateinit var tourStayUseCase: TourStayUseCase
     private lateinit var tourParamsParser: TourParamsParser
     private lateinit var tourService: TourService
 
@@ -34,12 +38,16 @@ class TourServiceTest {
         tourAreaBasedUseCase = mockk()
         tourLocationBasedUseCase = mockk()
         tourDetailUseCase = mockk()
+        tourFestivalUseCase = mockk()
+        tourStayUseCase = mockk()
         tourParamsParser = mockk()
         tourService =
             TourService(
                 tourAreaBasedUseCase,
                 tourLocationBasedUseCase,
                 tourDetailUseCase,
+                tourFestivalUseCase,
+                tourStayUseCase,
                 tourParamsParser,
             )
     }
@@ -50,19 +58,20 @@ class TourServiceTest {
         // given
         val contentTypeId = "12"
         val areaAndSigunguCode = "6-10"
+        val languageCode = "KorService2"
         val expectedParams = TourParams(areaCode = "6", sigunguCode = "10", contentTypeId = "12")
 
-        every { tourParamsParser.parse(contentTypeId, areaAndSigunguCode) } returns expectedParams
+        every { tourParamsParser.parse(contentTypeId, areaAndSigunguCode, languageCode) } returns expectedParams
 
         // when
-        val result = tourService.parseParams(contentTypeId, areaAndSigunguCode)
+        val result = tourService.parseParams(contentTypeId, areaAndSigunguCode, languageCode)
 
         // then
         assertThat(result.areaCode).isEqualTo("6")
         assertThat(result.sigunguCode).isEqualTo("10")
         assertThat(result.contentTypeId).isEqualTo("12")
 
-        verify(exactly = 1) { tourParamsParser.parse(contentTypeId, areaAndSigunguCode) }
+        verify(exactly = 1) { tourParamsParser.parse(contentTypeId, areaAndSigunguCode, languageCode) }
     }
 
     @Test
@@ -254,18 +263,18 @@ class TourServiceTest {
         val languageCode = "KorService2"
         val mockResponse = TourResponse(items = listOf())
 
-        every { tourParamsParser.parse(contentTypeId, areaAndSigunguCode) } returns parsedParams
+        every { tourParamsParser.parse(contentTypeId, areaAndSigunguCode, languageCode) } returns parsedParams
         every { tourAreaBasedUseCase.fetchAreaBasedTours(parsedParams, languageCode) } returns mockResponse
 
         // when
-        val params = tourService.parseParams(contentTypeId, areaAndSigunguCode)
+        val params = tourService.parseParams(contentTypeId, areaAndSigunguCode, languageCode)
         val result = tourService.fetchTours(params, languageCode)
 
         // then
         assertThat(params.areaCode).isEqualTo("6")
         assertThat(result.items).isEmpty()
 
-        verify(exactly = 1) { tourParamsParser.parse(contentTypeId, areaAndSigunguCode) }
+        verify(exactly = 1) { tourParamsParser.parse(contentTypeId, areaAndSigunguCode, languageCode) }
         verify(exactly = 1) { tourAreaBasedUseCase.fetchAreaBasedTours(parsedParams, languageCode) }
     }
 

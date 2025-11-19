@@ -69,10 +69,9 @@ class TourTool(
                 "contentTypeName: $contentTypeName, areaAndSigunguCode: $areaAndSigunguCode, languageCode: $languageCode",
         )
 
-        val tourParams = tourService.parseParams(contentTypeName, areaAndSigunguCode, languageCode)
-        val tourInfo = tourService.fetchTours(tourParams, languageCode)
-
         return try {
+            val tourParams = tourService.parseParams(contentTypeName, areaAndSigunguCode, languageCode)
+            val tourInfo = tourService.fetchTours(tourParams, languageCode)
             val result = tourInfo.let { objectMapper.writeValueAsString(it) }
             log.debug("✅ [TOOL RESULT] getAreaBasedTourInfo - 결과: ${result.take(100)}...")
             result
@@ -130,11 +129,10 @@ class TourTool(
                 "mapX: $mapX, mapY: $mapY, radius: $radius, languageCode: $languageCode",
         )
 
-        val tourParams = tourService.parseParams(contentTypeName, areaAndSigunguCode, languageCode)
-        val locationBasedParams = TourLocationBasedParams(mapX, mapY, radius)
-        val tourLocationBasedInfo = tourService.fetchLocationBasedTours(tourParams, locationBasedParams, languageCode)
-
         return try {
+            val tourParams = tourService.parseParams(contentTypeName, areaAndSigunguCode, languageCode)
+            val locationBasedParams = TourLocationBasedParams(mapX, mapY, radius)
+            val tourLocationBasedInfo = tourService.fetchLocationBasedTours(tourParams, locationBasedParams, languageCode)
             val result = tourLocationBasedInfo.let { objectMapper.writeValueAsString(it) }
             log.debug("✅ [TOOL RESULT] getLocationBasedTourInfo - 결과: ${result.take(100)}...")
             result
@@ -171,10 +169,9 @@ class TourTool(
 
         log.debug("🔧 [TOOL CALLED] getTourDetailInfo - contentId: $contentId, languageCode: $languageCode")
 
-        val tourDetailParams = TourDetailParams(contentId)
-        val tourDetailInfo = tourService.fetchTourDetail(tourDetailParams, languageCode)
-
         return try {
+            val tourDetailParams = TourDetailParams(contentId)
+            val tourDetailInfo = tourService.fetchTourDetail(tourDetailParams, languageCode)
             val result = tourDetailInfo.let { objectMapper.writeValueAsString(it) }
             log.debug("✅ [TOOL RESULT] getTourDetailInfo - 결과: ${result.take(100)}...")
             result
@@ -233,10 +230,9 @@ class TourTool(
                 "areaCode: $areaCode, sigunguCode: $sigunguCode, languageCode: $languageCode",
         )
 
-        val festivalParams = TourFestivalParams(eventStartDate, eventEndDate, areaCode, sigunguCode)
-        val festivalInfo = tourService.fetchFestivalInfo(festivalParams, languageCode)
-
         return try {
+            val festivalParams = TourFestivalParams(eventStartDate, eventEndDate, areaCode, sigunguCode)
+            val festivalInfo = tourService.fetchFestivalInfo(festivalParams, languageCode)
             val result = festivalInfo.let { objectMapper.writeValueAsString(it) }
             log.debug("✅ [TOOL RESULT] getFestivalInfo - 결과: ${result.take(100)}...")
             result
@@ -297,10 +293,9 @@ class TourTool(
                 "modifiedtime: $modifiedtime, arrange: $arrange, languageCode: $languageCode",
         )
 
-        val stayParams = TourStayParams(areaCode, sigunguCode, modifiedtime, arrange)
-        val stayInfo = tourService.fetchStayInfo(stayParams, languageCode)
-
         return try {
+            val stayParams = TourStayParams(areaCode, sigunguCode, modifiedtime, arrange)
+            val stayInfo = tourService.fetchStayInfo(stayParams, languageCode)
             val result = stayInfo.let { objectMapper.writeValueAsString(it) }
             log.debug("✅ [TOOL RESULT] getStayInfo - 결과: ${result.take(100)}...")
             result

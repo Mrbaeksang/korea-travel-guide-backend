@@ -25,9 +25,8 @@ class GuideFinderTool(
     ): String {
         log.debug("🔧 [TOOL CALLED] findGuidesByRegion - region: $region")
 
-        val guides = guideService.findGuidesByRegion(region)
-
         return try {
+            val guides = guideService.findGuidesByRegion(region)
             if (guides.isEmpty()) {
                 log.debug("✅ [TOOL RESULT] findGuidesByRegion - 결과 없음")
                 return "해당 지역에서 활동하는 가이드를 찾을 수 없습니다."

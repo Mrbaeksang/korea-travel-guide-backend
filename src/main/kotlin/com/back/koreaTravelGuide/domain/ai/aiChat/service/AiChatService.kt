@@ -10,13 +10,16 @@ import com.back.koreaTravelGuide.domain.ai.aiChat.repository.AiChatSessionReposi
 import org.springframework.ai.chat.client.ChatClient
 import org.springframework.ai.chat.memory.ChatMemory
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
+@Transactional
 class AiChatService(
     private val aiChatMessageRepository: AiChatMessageRepository,
     private val aiChatSessionRepository: AiChatSessionRepository,
     private val chatClient: ChatClient,
 ) {
+    @Transactional(readOnly = true)
     fun getSessions(userId: Long): List<AiChatSession> {
         return aiChatSessionRepository.findByUserIdOrderByCreatedAtDesc(userId)
     }
@@ -35,6 +38,7 @@ class AiChatService(
         aiChatSessionRepository.deleteById(sessionId)
     }
 
+    @Transactional(readOnly = true)
     fun getSessionMessages(
         sessionId: Long,
         userId: Long,

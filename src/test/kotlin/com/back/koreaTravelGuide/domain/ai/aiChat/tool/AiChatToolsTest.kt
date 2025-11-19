@@ -176,15 +176,15 @@ class AiChatToolsTest {
                         ),
                 )
 
-            every { tourService.parseParams(contentTypeId, areaAndSigunguCode) } returns mockParams
+            every { tourService.parseParams(contentTypeId, areaAndSigunguCode, languageCode) } returns mockParams
             every { tourService.fetchTours(mockParams, languageCode) } returns mockResponse
 
             // when
-            val result = tourTool.getAreaBasedTourInfo(languageCode, contentTypeId, areaAndSigunguCode)
+            val result = tourTool.getAreaBasedTourInfo(contentTypeId, areaAndSigunguCode)
 
             // then
             assertThat(result).contains("items")
-            verify(exactly = 1) { tourService.parseParams(contentTypeId, areaAndSigunguCode) }
+            verify(exactly = 1) { tourService.parseParams(contentTypeId, areaAndSigunguCode, languageCode) }
             verify(exactly = 1) { tourService.fetchTours(mockParams, languageCode) }
         }
 
@@ -192,14 +192,13 @@ class AiChatToolsTest {
         @DisplayName("지역기반 관광정보 조회 실패 시 에러 메시지를 반환한다")
         fun `should return error message when area-based tour fetch fails`() {
             // given
-            val languageCode = "KorService2"
             val contentTypeId = "12"
             val areaAndSigunguCode = "6-10"
 
-            every { tourService.parseParams(any(), any()) } throws RuntimeException("API Error")
+            every { tourService.parseParams(any(), any(), any()) } throws RuntimeException("API Error")
 
             // when
-            val result = tourTool.getAreaBasedTourInfo(languageCode, contentTypeId, areaAndSigunguCode)
+            val result = tourTool.getAreaBasedTourInfo(contentTypeId, areaAndSigunguCode)
 
             // then
             assertThat(result).isEqualTo("지역기반 관광정보 조회를 가져올 수 없습니다.")
@@ -232,7 +231,7 @@ class AiChatToolsTest {
             every { tourService.fetchTourDetail(any<TourDetailParams>(), languageCode) } returns mockResponse
 
             // when
-            val result = tourTool.getTourDetailInfo(languageCode, contentId)
+            val result = tourTool.getTourDetailInfo(contentId)
 
             // then
             assertThat(result).contains(contentId)
@@ -244,13 +243,12 @@ class AiChatToolsTest {
         @DisplayName("관광정보 상세조회 실패 시 에러 메시지를 반환한다")
         fun `should return error message when tour detail fetch fails`() {
             // given
-            val languageCode = "KorService2"
             val contentId = "127974"
 
             every { tourService.fetchTourDetail(any<TourDetailParams>(), any()) } throws RuntimeException("API Error")
 
             // when
-            val result = tourTool.getTourDetailInfo(languageCode, contentId)
+            val result = tourTool.getTourDetailInfo(contentId)
 
             // then
             assertThat(result).isEqualTo("관광정보 상세조회를 가져올 수 없습니다.")
